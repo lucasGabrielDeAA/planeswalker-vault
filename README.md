@@ -1,5 +1,9 @@
 # Planeswalker Vault - Magic: The Gathering Scryfall Explorer
 
+<p align="center">
+  <img src="planeswalker-vault.png" alt="RedClouds MC Logo" width="800" height="800" style="max-width: 100%; height: auto;" />
+</p>
+
 **Planeswalker Vault** is a modern, high-performance web application built with **Vue 3**, **TypeScript**, **Vite**, **Pinia**, and **TanStack Query** for exploring over 100,000+ Magic: The Gathering cards powered by the official **Scryfall API**.
 
 ---
