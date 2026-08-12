@@ -47,10 +47,10 @@ To clone and run this project locally from GitHub:
 
 ```sh
 # Clone the repository
-git clone https://github.com/lucasGabrielDeAA/mtg-explorer.git
+git clone https://github.com/lucasGabrielDeAA/planeswalker-vault.git
 
 # Navigate into the project directory
-cd mtg-explorer
+cd planeswalker-vault
 ```
 
 ---
