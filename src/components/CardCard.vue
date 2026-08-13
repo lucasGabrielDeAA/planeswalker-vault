@@ -176,6 +176,7 @@ function handleOpenModal() {
   overflow: hidden;
   height: 100%;
   box-sizing: border-box;
+  min-width: 0;
 }
 
 .card-item:hover {
@@ -217,6 +218,7 @@ function handleOpenModal() {
   z-index: 2;
   overflow: hidden;
   flex-shrink: 0;
+  min-width: 0;
 }
 
 .card-title-group {
@@ -227,6 +229,7 @@ function handleOpenModal() {
   overflow: hidden;
   height: 100%;
   flex: 1;
+  min-width: 0;
 }
 
 .card-name {
@@ -316,24 +319,32 @@ function handleOpenModal() {
   margin-top: auto;
   height: 24px;
   flex-shrink: 0;
+  gap: 6px;
+  min-width: 0;
 }
 
 .set-info {
   display: flex;
   align-items: center;
   gap: 6px;
-  flex-shrink: 0;
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .set-code {
   font-weight: 700;
   color: var(--text-muted);
+  flex-shrink: 0;
 }
 
 .rarity-tag {
   text-transform: capitalize;
   font-size: 0.7rem;
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .rarity-common {
   color: var(--rarity-common);
@@ -353,7 +364,7 @@ function handleOpenModal() {
   text-align: right;
   white-space: nowrap;
   flex-shrink: 0;
-  min-width: 85px;
+  margin-left: auto;
 }
 .usd-price {
   color: #4ade80;

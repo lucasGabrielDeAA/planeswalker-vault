@@ -141,14 +141,16 @@ function hideSuggestions() {
   min-height: 64px;
   display: flex;
   align-items: center;
+  box-sizing: border-box;
 }
 
 .nav-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: 16px;
   width: 100%;
+  min-width: 0;
 }
 
 .brand-logo {
@@ -157,7 +159,6 @@ function hideSuggestions() {
   gap: 10px;
   text-decoration: none;
   flex-shrink: 0;
-  min-width: 210px;
 }
 
 .brand-icon {
@@ -176,8 +177,10 @@ function hideSuggestions() {
 
 .search-box {
   position: relative;
-  width: 360px;
-  flex-shrink: 0;
+  width: 320px;
+  max-width: 360px;
+  flex: 1 1 180px;
+  min-width: 150px;
 }
 
 .search-input-wrapper {
@@ -241,21 +244,21 @@ function hideSuggestions() {
 .nav-right-group {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   flex-shrink: 0;
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
 }
 
 .nav-item {
   color: var(--text-muted);
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  padding: 6px 10px;
+  padding: 6px 8px;
   border-radius: var(--radius-sm);
   transition: all 0.2s ease;
   white-space: nowrap;
@@ -319,13 +322,15 @@ function hideSuggestions() {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 960px) {
   .nav-container {
     flex-wrap: wrap;
   }
   .search-box {
     order: 3;
+    width: 100%;
     max-width: 100%;
+    flex: 1 1 100%;
   }
 }
 </style>

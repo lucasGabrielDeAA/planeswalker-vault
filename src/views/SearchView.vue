@@ -114,27 +114,34 @@ function goToPage(page: number) {
 <style scoped>
 .search-view-container {
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 280px minmax(0, 1fr);
   gap: 20px;
   max-width: 1280px;
-  padding: 0 12px 40px 120px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 12px 40px 12px;
+  box-sizing: border-box;
 }
 
 @media (max-width: 900px) {
   .search-view-container {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
 .sidebar {
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  width: 100%;
 }
 
 .main-content {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-width: 0;
+  width: 100%;
 }
 
 .results-header {
@@ -143,12 +150,14 @@ function goToPage(page: number) {
   justify-content: space-between;
   padding: 12px 20px;
   min-height: 54px;
+  gap: 12px;
 }
 
 .stats-group {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
 }
 
 .stats-group h2 {
@@ -179,6 +188,8 @@ function goToPage(page: number) {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 16px;
+  min-width: 0;
+  width: 100%;
 }
 
 .card-skeleton {

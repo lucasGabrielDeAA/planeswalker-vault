@@ -160,6 +160,9 @@ function handleReset() {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
 }
 
 .panel-header {
@@ -195,6 +198,7 @@ function handleReset() {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  min-width: 0;
 }
 
 .group-label {
@@ -208,6 +212,7 @@ function handleReset() {
 .color-picker {
   display: flex;
   gap: 6px;
+  flex-wrap: wrap;
 }
 
 .color-btn {
@@ -231,6 +236,9 @@ function handleReset() {
 .match-mode-selector select,
 .filter-select {
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   padding: 8px 12px;
   background: var(--bg-surface-elevated);
   color: var(--text-main);
@@ -247,10 +255,18 @@ function handleReset() {
 .sort-controls {
   display: flex;
   gap: 6px;
+  min-width: 0;
+  width: 100%;
+}
+
+.sort-controls .filter-select:first-child {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .dir-select {
-  width: 110px;
+  width: 95px;
+  flex-shrink: 0;
 }
 
 .query-preview {
@@ -262,6 +278,8 @@ function handleReset() {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .preview-label {
@@ -273,5 +291,6 @@ function handleReset() {
   font-size: 0.75rem;
   color: var(--primary-gold);
   word-break: break-all;
+  overflow-wrap: anywhere;
 }
 </style>
