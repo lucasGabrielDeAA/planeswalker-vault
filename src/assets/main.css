@@ -116,6 +116,7 @@ button {
 .gold-text {
   background: linear-gradient(135deg, #fff2c5 0%, #e5c158 50%, #b88d2a 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   font-family: var(--font-serif);
 }
