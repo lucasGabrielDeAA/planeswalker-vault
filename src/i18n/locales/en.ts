@@ -6,6 +6,7 @@ export const en = {
     binder: 'Saved Binder',
     searchPlaceholder: 'Search cards, syntax (e.g. sol ring, c:blue t:creature)...',
     brandName: 'Planeswalker Vault',
+    clearSearch: 'Clear search',
   },
   search: {
     title: 'Card Explorer',

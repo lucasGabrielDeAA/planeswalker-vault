@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useCardsStore } from '@/stores/cards'
 import { useBinderStore } from '@/stores/binder'
@@ -12,8 +12,19 @@ const cardsStore = useCardsStore()
 const binderStore = useBinderStore()
 const { t, locale, setLocale } = useI18n()
 
+const searchInputRef = ref<HTMLInputElement | null>(null)
 const inputQuery = ref('')
 const isFocused = ref(false)
+
+// Keep inputQuery in sync if store's search query changes externally (e.g., reset filters)
+watch(
+  () => cardsStore.searchQuery,
+  (newVal) => {
+    if (newVal !== inputQuery.value) {
+      inputQuery.value = newVal
+    }
+  }
+)
 
 // TanStack Vue Query for card autocomplete suggestions
 const { data: autocompleteData } = useCardAutocompleteQuery(inputQuery)
@@ -30,6 +41,16 @@ function handleSearchSubmit() {
   if (route.name !== 'search') {
     router.push({ name: 'search' })
   }
+}
+
+function clearSearch() {
+  inputQuery.value = ''
+  isFocused.value = false
+  if (cardsStore.searchQuery) {
+    cardsStore.searchQuery = ''
+    cardsStore.executeSearch(1)
+  }
+  searchInputRef.value?.focus()
 }
 
 function selectSuggestion(item: string) {
@@ -64,6 +85,7 @@ function hideSuggestions() {
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
           <input
+            ref="searchInputRef"
             v-model="inputQuery"
             type="text"
             :placeholder="t('nav.searchPlaceholder')"
@@ -72,6 +94,20 @@ function hideSuggestions() {
             @focus="isFocused = true"
             @blur="hideSuggestions"
           />
+          <button
+            v-if="inputQuery"
+            type="button"
+            class="clear-search-btn"
+            :title="t('nav.clearSearch')"
+            :aria-label="t('nav.clearSearch')"
+            @mousedown.prevent
+            @click="clearSearch"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
 
         <!-- Autocomplete Suggestions Dropdown -->
@@ -193,11 +229,12 @@ function hideSuggestions() {
   position: absolute;
   left: 12px;
   color: var(--text-dim);
+  pointer-events: none;
 }
 
 .search-input {
   width: 100%;
-  padding: 9px 12px 9px 38px;
+  padding: 9px 36px 9px 38px;
   background: var(--bg-surface-elevated);
   border: 1px solid var(--border-glass);
   border-radius: var(--radius-full);
@@ -209,6 +246,36 @@ function hideSuggestions() {
 .search-input:focus {
   border-color: var(--primary-gold);
   box-shadow: 0 0 12px var(--border-glow);
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.clear-search-btn:hover {
+  background: rgba(229, 193, 88, 0.25);
+  color: var(--primary-gold);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.clear-search-btn:active {
+  transform: translateY(-50%) scale(0.95);
+  background: rgba(229, 193, 88, 0.4);
 }
 
 .suggestions-dropdown {

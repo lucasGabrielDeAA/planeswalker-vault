@@ -8,6 +8,7 @@ export const ptBR: Translations = {
     binder: 'Meu Fichário',
     searchPlaceholder: 'Search cards, syntax (e.g. sol ring, c:blue t:creature)...',
     brandName: 'Planeswalker Vault',
+    clearSearch: 'Limpar busca',
   },
   search: {
     title: 'Explorador de Cartas',

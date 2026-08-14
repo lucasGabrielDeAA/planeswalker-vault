@@ -27,11 +27,24 @@ interface CacheEntry<TData = any> {
   promise?: Promise<TData>
 }
 
+export interface DefaultQueryOptions {
+  staleTime?: number
+  gcTime?: number
+  refetchOnWindowFocus?: boolean
+  retry?: boolean | number
+}
+
+export interface QueryClientConfig {
+  defaultOptions?: {
+    queries?: DefaultQueryOptions
+  }
+}
+
 export class QueryClient {
   private cache = new Map<string, CacheEntry>()
   private defaultStaleTime: number
 
-  constructor(options?: { defaultOptions?: { queries?: { staleTime?: number } } }) {
+  constructor(options?: QueryClientConfig) {
     this.defaultStaleTime = options?.defaultOptions?.queries?.staleTime ?? 1000 * 60 * 5 // 5 mins
   }
 
