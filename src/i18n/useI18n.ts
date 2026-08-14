@@ -131,15 +131,7 @@ export function useI18n() {
 
     if (isNaN(date.getTime())) return typeof val === 'string' ? val : ''
 
-    if (currentLocale.value === 'pt-BR') {
-      return date.toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-      })
-    }
-
-    return date.toLocaleDateString('en-US', {
+    return date.toLocaleDateString(currentLocale.value, {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
