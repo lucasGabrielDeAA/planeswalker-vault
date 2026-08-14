@@ -110,12 +110,49 @@ export function useI18n() {
     })
   }
 
+  // Format date based on current active locale (e.g. DD/MM/YYYY for pt-BR, MM/DD/YYYY for en)
+  function formatDate(val: string | Date | null | undefined): string {
+    if (!val) return ''
+
+    let date: Date
+    if (typeof val === 'string') {
+      const [yearStr, monthStr, dayStr] = val.split('-')
+      if (yearStr && monthStr && dayStr) {
+        const year = parseInt(yearStr, 10)
+        const month = parseInt(monthStr, 10) - 1
+        const day = parseInt(dayStr, 10)
+        date = new Date(year, month, day)
+      } else {
+        date = new Date(val)
+      }
+    } else {
+      date = val
+    }
+
+    if (isNaN(date.getTime())) return typeof val === 'string' ? val : ''
+
+    if (currentLocale.value === 'pt-BR') {
+      return date.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      })
+    }
+
+    return date.toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    })
+  }
+
   return {
     locale: computed(() => currentLocale.value),
     setLocale,
     toggleLocale,
     t,
     formatCurrency,
+    formatDate,
     usdToBrlRate: computed(() => usdToBrlRate.value),
     usdPctChange: computed(() => usdPctChange.value),
     usdRateVariationText,
