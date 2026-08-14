@@ -125,7 +125,7 @@ function handleOpenModal() {
       </div>
 
       <!-- Flip Double Sided Button -->
-      <button v-if="isDoubleSided" class="flip-btn" title="Flip card face" @click="handleFlip">
+      <button v-if="isDoubleSided" class="flip-btn" :title="t('card.flipTitle')" @click="handleFlip">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -140,7 +140,7 @@ function handleOpenModal() {
           <polyline points="7 23 3 19 7 15"></polyline>
           <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
         </svg>
-        <span>Flip</span>
+        <span>{{ t('card.flip') }}</span>
       </button>
     </div>
 

@@ -179,7 +179,7 @@ function hideSuggestions() {
         <button
           class="lang-btn"
           :class="{ active: locale === 'en' }"
-          title="English"
+          :title="t('nav.langEn')"
           @click="setLocale('en')"
         >
           🇺🇸 EN
@@ -187,7 +187,7 @@ function hideSuggestions() {
         <button
           class="lang-btn"
           :class="{ active: locale === 'pt-BR' }"
-          title="Português Brasileiro"
+          :title="t('nav.langPtBr')"
           @click="setLocale('pt-BR')"
         >
           🇧🇷 PT-BR

@@ -21,6 +21,19 @@ function copyExportText() {
   navigator.clipboard.writeText(exportText.value)
   alert(t('binder.copiedAlert'))
 }
+
+function getColorLabel(color: string): string {
+  const map: Record<string, string> = {
+    W: t('binder.color_w'),
+    U: t('binder.color_u'),
+    B: t('binder.color_b'),
+    R: t('binder.color_r'),
+    G: t('binder.color_g'),
+    Colorless: t('binder.color_colorless'),
+    Multi: t('binder.color_multi'),
+  }
+  return map[color] || color
+}
 </script>
 
 <template>
@@ -75,7 +88,7 @@ function copyExportText() {
         <h3>{{ t('binder.colorBreakdown') }}</h3>
         <div class="color-grid">
           <div v-for="(count, color) in binderStore.colorBreakdown" :key="color" class="color-stat">
-            <span class="color-tag" :class="`color-${color.toLowerCase()}`">{{ color }}</span>
+            <span class="color-tag" :class="`color-${color.toLowerCase()}`">{{ getColorLabel(color) }}</span>
             <span class="color-count">{{ count }}</span>
           </div>
         </div>
@@ -92,7 +105,7 @@ function copyExportText() {
           <button class="qty-btn" @click="binderStore.updateQuantity(entry.card.id, entry.quantity - 1)">-</button>
           <span class="qty-val">{{ t('binder.qty', { qty: entry.quantity }) }}</span>
           <button class="qty-btn" @click="binderStore.updateQuantity(entry.card.id, entry.quantity + 1)">+</button>
-          <button class="remove-btn" title="Remove" @click="binderStore.removeCard(entry.card.id)">✕</button>
+          <button class="remove-btn" :title="t('binder.remove')" @click="binderStore.removeCard(entry.card.id)">✕</button>
         </div>
       </div>
     </div>

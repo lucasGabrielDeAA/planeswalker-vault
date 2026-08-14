@@ -18,16 +18,16 @@ const { data: setsData, isLoading } = useSetsQuery()
 
 const sets = computed(() => setsData.value || [])
 
-const setTypes = [
-  { value: '', label: 'All Set Types' },
-  { value: 'expansion', label: 'Expansion' },
-  { value: 'core', label: 'Core Sets' },
-  { value: 'commander', label: 'Commander' },
-  { value: 'masters', label: 'Masters' },
-  { value: 'box', label: 'Box Sets / Secret Lair' },
-  { value: 'draft_innovation', label: 'Draft Innovation' },
-  { value: 'promo', label: 'Promotional' },
-]
+const setTypes = computed(() => [
+  { value: '', label: t('sets.allTypes') },
+  { value: 'expansion', label: t('sets.typeExpansion') },
+  { value: 'core', label: t('sets.typeCore') },
+  { value: 'commander', label: t('sets.typeCommander') },
+  { value: 'masters', label: t('sets.typeMasters') },
+  { value: 'box', label: t('sets.typeBox') },
+  { value: 'draft_innovation', label: t('sets.typeDraftInnovation') },
+  { value: 'promo', label: t('sets.typePromo') },
+])
 
 const filteredSets = computed(() => {
   return sets.value.filter((s) => {
@@ -67,8 +67,8 @@ function selectSet(set: ScryfallSet) {
           class="set-search-input"
         />
         <select v-model="selectedSetType" class="set-type-select">
-          <option v-for="t in setTypes" :key="t.value" :value="t.value">
-            {{ t.label }}
+          <option v-for="typeOption in setTypes" :key="typeOption.value" :value="typeOption.value">
+            {{ typeOption.label }}
           </option>
         </select>
       </div>
@@ -110,7 +110,7 @@ function selectSet(set: ScryfallSet) {
     </div>
 
     <div v-else class="empty-sets glass-panel">
-      <p>No expansion sets matched your filter criteria.</p>
+      <p>{{ t('sets.noSetsFound') }}</p>
     </div>
   </div>
 </template>
@@ -157,31 +157,29 @@ function selectSet(set: ScryfallSet) {
   font-size: 0.85rem;
   outline: none;
 }
-.set-search-input:focus,
-.set-type-select:focus {
-  border-color: var(--primary-gold);
+
+.set-search-input {
+  width: 260px;
 }
 
 .sets-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 16px;
 }
 
 .set-card {
-  padding: 18px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 10px;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
 }
 .set-card:hover {
   transform: translateY(-4px);
   border-color: var(--border-glow);
-  box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.6),
-    0 0 16px rgba(229, 193, 88, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
 }
 
 .set-card-header {
@@ -191,25 +189,24 @@ function selectSet(set: ScryfallSet) {
 }
 
 .set-icon {
-  width: 32px;
-  height: 32px;
-  filter: invert(0.9) sepia(0.3) saturate(2) hue-rotate(5deg);
+  width: 24px;
+  height: 24px;
+  filter: invert(1);
 }
 
 .set-code-badge {
-  font-family: var(--font-serif);
-  font-weight: 800;
-  font-size: 0.85rem;
+  background: var(--bg-surface-elevated);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 0.75rem;
   color: var(--primary-gold);
-  background: rgba(229, 193, 88, 0.1);
-  padding: 2px 8px;
-  border-radius: var(--radius-sm);
 }
 
 .set-name {
   font-size: 1rem;
-  font-weight: 700;
-  color: var(--text-main);
+  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -219,25 +216,17 @@ function selectSet(set: ScryfallSet) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
 }
 
 .set-type-badge {
   text-transform: capitalize;
-  color: var(--text-muted);
-}
-
-.card-count {
-  font-weight: 600;
-  color: var(--accent-cyan);
 }
 
 .release-date {
   font-size: 0.75rem;
   color: var(--text-dim);
-  border-top: 1px dashed var(--border-glass);
-  padding-top: 6px;
-  margin-top: auto;
 }
 
 .empty-sets {

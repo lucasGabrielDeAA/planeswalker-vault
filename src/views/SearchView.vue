@@ -49,7 +49,7 @@ const totalPages = computed(() => {
 const hasMore = computed(() => searchResult.value?.has_more ?? false)
 const errorMessage = computed(() => {
   if (!isError.value) return null
-  return error.value?.message || 'Failed to fetch cards. Try refining your query.'
+  return error.value?.message || t('search.fetchError')
 })
 
 // Numbered page pills calculation

@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useI18n } from '@/i18n/useI18n'
 import { useRandomCardQuery } from '@/queries/useScryfallQueries'
-import CardCard from '@/components/CardCard.vue'
+import CardDetails from '@/components/CardDetails.vue'
 
 const filterQuery = ref('')
 const { t } = useI18n()
@@ -25,13 +25,13 @@ function drawNextCard() {
 
       <div class="draw-controls">
         <select v-model="filterQuery" class="filter-select" @change="drawNextCard">
-          <option value="">Any Card</option>
-          <option value="is:commander">Commander Legal Only</option>
-          <option value="r:mythic">Mythic Rares Only</option>
-          <option value="c:red">Red Spells Only</option>
-          <option value="c:blue">Blue Spells Only</option>
-          <option value="t:creature">Creatures Only</option>
-          <option value="t:planeswalker">Planeswalkers Only</option>
+          <option value="">{{ t('random.filterAny') }}</option>
+          <option value="is:commander">{{ t('random.filterCommander') }}</option>
+          <option value="r:mythic">{{ t('random.filterMythic') }}</option>
+          <option value="c:red">{{ t('random.filterRed') }}</option>
+          <option value="c:blue">{{ t('random.filterBlue') }}</option>
+          <option value="t:creature">{{ t('random.filterCreature') }}</option>
+          <option value="t:planeswalker">{{ t('random.filterPlaneswalker') }}</option>
         </select>
 
         <button class="btn-primary" :disabled="isLoading || isFetching" @click="drawNextCard">
@@ -54,10 +54,28 @@ function drawNextCard() {
     <!-- Random Card Stage Display -->
     <div class="card-stage">
       <div v-if="isLoading || isFetching" class="drawing-skeleton glass-panel">
-        <div class="skeleton" style="width: 280px; aspect-ratio: 488/680; border-radius: 14px" />
+        <div class="skeleton-grid">
+          <div class="skeleton-image-col">
+            <div
+              class="skeleton"
+              style="width: 100%; aspect-ratio: 488/680; border-radius: 14px; max-width: 320px"
+            />
+            <div
+              class="skeleton"
+              style="width: 100%; height: 42px; border-radius: 8px; margin-top: 12px; max-width: 320px"
+            />
+          </div>
+          <div class="skeleton-details-col">
+            <div class="skeleton" style="height: 36px; width: 60%; border-radius: 6px" />
+            <div class="skeleton" style="height: 20px; width: 40%; border-radius: 4px" />
+            <div class="skeleton" style="height: 36px; width: 100%; border-radius: 6px" />
+            <div class="skeleton" style="height: 120px; width: 100%; border-radius: 8px" />
+            <div class="skeleton" style="height: 90px; width: 100%; border-radius: 8px" />
+          </div>
+        </div>
       </div>
-      <div v-else-if="card" class="drawn-card-wrapper fade-in">
-        <CardCard :card="card" style="width: 280px" />
+      <div v-else-if="card" class="drawn-card-wrapper glass-panel fade-in">
+        <CardDetails :card="card" />
       </div>
     </div>
   </div>
@@ -65,7 +83,7 @@ function drawNextCard() {
 
 <style scoped>
 .random-view-container {
-  max-width: 580px;
+  max-width: 1280px;
   width: 100%;
   margin: 0 auto;
   padding: 0 12px 40px 12px;
@@ -78,8 +96,8 @@ function drawNextCard() {
 .random-header {
   padding: 24px;
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .subtitle {
@@ -89,8 +107,8 @@ function drawNextCard() {
 
 .draw-controls {
   display: flex;
-  gap: 12px;
-  margin: 12px auto;
+  align-items: center;
+  gap: 20px;
 }
 
 .filter-select {
@@ -106,12 +124,46 @@ function drawNextCard() {
 .card-stage {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   min-height: 400px;
+  width: 100%;
+}
+
+.drawn-card-wrapper {
+  width: 100%;
+  max-width: 960px;
+  padding: 24px;
+  box-sizing: border-box;
 }
 
 .drawing-skeleton {
-  padding: 16px;
+  width: 100%;
+  max-width: 960px;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+}
+
+.skeleton-image-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.skeleton-details-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .skeleton-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 600px) {
@@ -119,8 +171,7 @@ function drawNextCard() {
     flex-direction: column;
     width: 100%;
   }
-  .filter-select,
-  .btn-primary {
+  .filter-select {
     width: 100%;
   }
 }

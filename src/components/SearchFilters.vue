@@ -7,53 +7,53 @@ import type { SortOrder } from '@/types/scryfall'
 const cardsStore = useCardsStore()
 const { t } = useI18n()
 
-const colors = [
-  { code: 'W', label: 'White', bg: 'var(--mtg-w)', text: '#2c2500' },
-  { code: 'U', label: 'Blue', bg: 'var(--mtg-u)', text: '#ffffff' },
-  { code: 'B', label: 'Black', bg: 'var(--mtg-b)', text: '#0f172a' },
-  { code: 'R', label: 'Red', bg: 'var(--mtg-r)', text: '#ffffff' },
-  { code: 'G', label: 'Green', bg: 'var(--mtg-g)', text: '#ffffff' },
-]
+const colors = computed(() => [
+  { code: 'W', label: t('filters.white'), bg: 'var(--mtg-w)', text: '#2c2500' },
+  { code: 'U', label: t('filters.blue'), bg: 'var(--mtg-u)', text: '#ffffff' },
+  { code: 'B', label: t('filters.black'), bg: 'var(--mtg-b)', text: '#0f172a' },
+  { code: 'R', label: t('filters.red'), bg: 'var(--mtg-r)', text: '#ffffff' },
+  { code: 'G', label: t('filters.green'), bg: 'var(--mtg-g)', text: '#ffffff' },
+])
 
 const cardTypes = computed(() => [
   { value: '', label: t('filters.allTypes') },
-  { value: 'creature', label: 'Creature' },
-  { value: 'instant', label: 'Instant' },
-  { value: 'sorcery', label: 'Sorcery' },
-  { value: 'enchantment', label: 'Enchantment' },
-  { value: 'artifact', label: 'Artifact' },
-  { value: 'planeswalker', label: 'Planeswalker' },
-  { value: 'land', label: 'Land' },
+  { value: 'creature', label: t('filters.creature') },
+  { value: 'instant', label: t('filters.instant') },
+  { value: 'sorcery', label: t('filters.sorcery') },
+  { value: 'enchantment', label: t('filters.enchantment') },
+  { value: 'artifact', label: t('filters.artifact') },
+  { value: 'planeswalker', label: t('filters.planeswalker') },
+  { value: 'land', label: t('filters.land') },
 ])
 
 const rarities = computed(() => [
   { value: '', label: t('filters.allRarities') },
-  { value: 'common', label: 'Common' },
-  { value: 'uncommon', label: 'Uncommon' },
-  { value: 'rare', label: 'Rare' },
-  { value: 'mythic', label: 'Mythic' },
+  { value: 'common', label: t('filters.common') },
+  { value: 'uncommon', label: t('filters.uncommon') },
+  { value: 'rare', label: t('filters.rare') },
+  { value: 'mythic', label: t('filters.mythic') },
 ])
 
 const formats = computed(() => [
   { value: '', label: t('filters.allFormats') },
-  { value: 'commander', label: 'Commander' },
-  { value: 'standard', label: 'Standard' },
-  { value: 'pioneer', label: 'Pioneer' },
-  { value: 'modern', label: 'Modern' },
-  { value: 'legacy', label: 'Legacy' },
-  { value: 'vintage', label: 'Vintage' },
-  { value: 'pauper', label: 'Pauper' },
+  { value: 'commander', label: t('filters.commander') },
+  { value: 'standard', label: t('filters.standard') },
+  { value: 'pioneer', label: t('filters.pioneer') },
+  { value: 'modern', label: t('filters.modern') },
+  { value: 'legacy', label: t('filters.legacy') },
+  { value: 'vintage', label: t('filters.vintage') },
+  { value: 'pauper', label: t('filters.pauper') },
 ])
 
 const sortOrders = computed<{ value: SortOrder; label: string }[]>(() => [
-  { value: 'edhrec', label: 'EDHREC Rank' },
-  { value: 'name', label: 'Name' },
-  { value: 'usd', label: 'Price' },
-  { value: 'released', label: 'Release Date' },
-  { value: 'rarity', label: 'Rarity' },
-  { value: 'cmc', label: 'Mana Value (CMC)' },
-  { value: 'power', label: 'Power' },
-  { value: 'toughness', label: 'Toughness' },
+  { value: 'edhrec', label: t('filters.sortEdhrec') },
+  { value: 'name', label: t('filters.sortName') },
+  { value: 'usd', label: t('filters.sortPrice') },
+  { value: 'released', label: t('filters.sortReleased') },
+  { value: 'rarity', label: t('filters.sortRarity') },
+  { value: 'cmc', label: t('filters.sortCmc') },
+  { value: 'power', label: t('filters.sortPower') },
+  { value: 'toughness', label: t('filters.sortToughness') },
 ])
 
 function handleApply() {
@@ -103,8 +103,8 @@ function handleReset() {
     <div class="filter-group">
       <label class="group-label">{{ t('filters.cardType') }}</label>
       <select v-model="cardsStore.selectedType" class="filter-select" @change="handleApply">
-        <option v-for="t in cardTypes" :key="t.value" :value="t.value">
-          {{ t.label }}
+        <option v-for="typeItem in cardTypes" :key="typeItem.value" :value="typeItem.value">
+          {{ typeItem.label }}
         </option>
       </select>
     </div>
@@ -139,16 +139,16 @@ function handleReset() {
           </option>
         </select>
         <select v-model="cardsStore.sortDir" class="filter-select dir-select" @change="handleApply">
-          <option value="auto">Auto</option>
-          <option value="asc">Ascending</option>
-          <option value="desc">Descending</option>
+          <option value="auto">{{ t('filters.dirAuto') }}</option>
+          <option value="asc">{{ t('filters.dirAsc') }}</option>
+          <option value="desc">{{ t('filters.dirDesc') }}</option>
         </select>
       </div>
     </div>
 
     <!-- Live Scryfall Query string view -->
     <div class="query-preview">
-      <span class="preview-label">Scryfall Syntax:</span>
+      <span class="preview-label">{{ t('filters.syntax') }}</span>
       <code class="query-code">{{ cardsStore.fullQueryString }}</code>
     </div>
   </aside>
@@ -198,52 +198,68 @@ function handleReset() {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  min-width: 0;
 }
 
 .group-label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  color: var(--text-muted);
 }
 
 .color-picker {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .color-btn {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   font-weight: 800;
   font-size: 0.85rem;
-  opacity: 0.4;
   border: 2px solid transparent;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+.color-btn:hover {
+  transform: scale(1.1);
 }
 .color-btn.active {
-  opacity: 1;
-  border-color: var(--primary-gold);
-  transform: scale(1.1);
-  box-shadow: 0 0 12px var(--border-glow);
+  border-color: #ffffff;
+  transform: scale(1.15);
+  box-shadow: 0 0 10px rgba(229, 193, 88, 0.6);
 }
 
-.match-mode-selector select,
-.filter-select {
+.match-mode-selector {
+  margin-top: 6px;
+}
+.match-mode-selector select {
   width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-  padding: 8px 12px;
+  padding: 6px 10px;
   background: var(--bg-surface-elevated);
-  color: var(--text-main);
   border: 1px solid var(--border-glass);
   border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  outline: none;
+}
+
+.filter-select {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
   font-size: 0.85rem;
   outline: none;
   transition: border-color 0.2s ease;
@@ -254,18 +270,10 @@ function handleReset() {
 
 .sort-controls {
   display: flex;
-  gap: 6px;
-  min-width: 0;
-  width: 100%;
+  gap: 8px;
 }
-
-.sort-controls .filter-select:first-child {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
 .dir-select {
-  width: 95px;
+  width: 110px;
   flex-shrink: 0;
 }
 
@@ -273,24 +281,20 @@ function handleReset() {
   margin-top: 8px;
   padding: 10px;
   background: rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--border-glass);
   border-radius: var(--radius-sm);
   display: flex;
   flex-direction: column;
   gap: 4px;
-  min-width: 0;
-  box-sizing: border-box;
 }
-
 .preview-label {
   font-size: 0.7rem;
   color: var(--text-dim);
+  text-transform: uppercase;
 }
-
 .query-code {
+  font-family: monospace;
   font-size: 0.75rem;
   color: var(--primary-gold);
   word-break: break-all;
-  overflow-wrap: anywhere;
 }
 </style>
