@@ -417,8 +417,6 @@ function goToPage(page: number) {
 }
 
 .total-badge {
-  background: var(--bg-surface-elevated);
-  border: 1px solid var(--border-glass);
   color: var(--primary-gold);
   font-size: 0.8rem;
   font-weight: 700;
