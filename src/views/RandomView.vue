@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { useI18n } from '@/i18n/useI18n'
 import { useRandomCardQuery } from '@/queries/useScryfallQueries'
 import CardCard from '@/components/CardCard.vue'
@@ -35,8 +35,16 @@ function drawNextCard() {
         </select>
 
         <button class="btn-primary" :disabled="isLoading || isFetching" @click="drawNextCard">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
           </svg>
           <span>{{ isLoading || isFetching ? t('random.loading') : t('random.button') }}</span>
         </button>
@@ -46,10 +54,10 @@ function drawNextCard() {
     <!-- Random Card Stage Display -->
     <div class="card-stage">
       <div v-if="isLoading || isFetching" class="drawing-skeleton glass-panel">
-        <div class="skeleton" style="width: 280px; aspect-ratio: 488/680; border-radius: 14px;" />
+        <div class="skeleton" style="width: 280px; aspect-ratio: 488/680; border-radius: 14px" />
       </div>
       <div v-else-if="card" class="drawn-card-wrapper fade-in">
-        <CardCard :card="card" style="width: 280px;" />
+        <CardCard :card="card" style="width: 280px" />
       </div>
     </div>
   </div>
@@ -57,9 +65,11 @@ function drawNextCard() {
 
 <style scoped>
 .random-view-container {
-  max-width: 900px;
+  max-width: 580px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 12px 40px 12px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -68,22 +78,19 @@ function drawNextCard() {
 .random-header {
   padding: 24px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
+  flex-direction: column;
   flex-wrap: wrap;
 }
 
 .subtitle {
   color: var(--text-muted);
   font-size: 0.9rem;
-  margin-top: 4px;
 }
 
 .draw-controls {
   display: flex;
-  align-items: center;
   gap: 12px;
+  margin: 12px auto;
 }
 
 .filter-select {
@@ -105,5 +112,16 @@ function drawNextCard() {
 
 .drawing-skeleton {
   padding: 16px;
+}
+
+@media (max-width: 600px) {
+  .draw-controls {
+    flex-direction: column;
+    width: 100%;
+  }
+  .filter-select,
+  .btn-primary {
+    width: 100%;
+  }
 }
 </style>

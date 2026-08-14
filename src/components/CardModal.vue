@@ -8,7 +8,7 @@ import ManaSymbol from './ManaSymbol.vue'
 
 const cardsStore = useCardsStore()
 const binderStore = useBinderStore()
-const { t, formatCurrency, usdRateVariationText, locale } = useI18n()
+const { t, formatCurrency, formatDate, usdRateVariationText, locale } = useI18n()
 
 const activeTab = ref<'details' | 'rulings' | 'prints'>('details')
 const activeFaceIndex = ref(0)
@@ -266,7 +266,7 @@ const legalitiesList = computed(() => {
               </div>
               <div v-else class="rulings-list">
                 <div v-for="(rule, idx) in rulings" :key="idx" class="ruling-item">
-                  <span class="ruling-date">{{ rule.published_at }}</span>
+                  <span class="ruling-date">{{ formatDate(rule.published_at) }}</span>
                   <p class="ruling-comment">{{ rule.comment }}</p>
                 </div>
               </div>

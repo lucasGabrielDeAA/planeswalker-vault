@@ -1,8 +1,8 @@
-import { ref, computed, watch, onUnmounted, inject, type App, type Ref } from 'vue'
+import { ref, watch, inject, type App, type Ref } from 'vue'
 
 export type QueryKey = readonly unknown[]
 
-export interface QueryOptions<TData = any, TError = Error> {
+export interface QueryOptions<TData = any, _TError = Error> {
   queryKey: QueryKey | Ref<QueryKey> | (() => QueryKey)
   queryFn: (context: { queryKey: QueryKey }) => Promise<TData>
   enabled?: boolean | Ref<boolean> | (() => boolean)

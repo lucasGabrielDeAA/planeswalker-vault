@@ -8,7 +8,7 @@ import type { ScryfallSet } from '@/types/scryfall'
 
 const router = useRouter()
 const cardsStore = useCardsStore()
-const { t } = useI18n()
+const { t, locale, formatDate } = useI18n()
 
 const searchFilter = ref('')
 const selectedSetType = ref('')
@@ -77,9 +77,9 @@ function selectSet(set: ScryfallSet) {
     <!-- Loading Skeleton -->
     <div v-if="isLoading" class="sets-grid">
       <div v-for="i in 12" :key="i" class="set-card-skeleton glass-panel">
-        <div class="skeleton" style="height: 24px; width: 40px; margin-bottom: 8px;" />
-        <div class="skeleton" style="height: 20px; width: 80%; margin-bottom: 6px;" />
-        <div class="skeleton" style="height: 16px; width: 50%;" />
+        <div class="skeleton" style="height: 24px; width: 40px; margin-bottom: 8px" />
+        <div class="skeleton" style="height: 20px; width: 80%; margin-bottom: 6px" />
+        <div class="skeleton" style="height: 16px; width: 50%" />
       </div>
     </div>
 
@@ -100,11 +100,11 @@ function selectSet(set: ScryfallSet) {
 
         <div class="set-meta">
           <span class="set-type-badge">{{ set.set_type.replace('_', ' ') }}</span>
-          <span class="card-count">{{ set.card_count }} cards</span>
+          <span class="card-count">{{ t('sets.total', { total: set.card_count }) }}</span>
         </div>
 
         <div v-if="set.released_at" class="release-date">
-          {{ t('sets.releaseDate') }}: {{ set.released_at }}
+          {{ t('sets.releaseDate') }}: {{ formatDate(set.released_at) }}
         </div>
       </div>
     </div>
@@ -118,8 +118,10 @@ function selectSet(set: ScryfallSet) {
 <style scoped>
 .sets-view-container {
   max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 12px 40px 12px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -177,7 +179,9 @@ function selectSet(set: ScryfallSet) {
 .set-card:hover {
   transform: translateY(-4px);
   border-color: var(--border-glow);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(229, 193, 88, 0.15);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.6),
+    0 0 16px rgba(229, 193, 88, 0.15);
 }
 
 .set-card-header {

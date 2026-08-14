@@ -125,8 +125,10 @@ function copyExportText() {
 <style scoped>
 .binder-view-container {
   max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 12px 40px 12px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 20px;

@@ -23,7 +23,7 @@ watch(
     if (newVal !== inputQuery.value) {
       inputQuery.value = newVal
     }
-  }
+  },
 )
 
 // TanStack Vue Query for card autocomplete suggestions
@@ -71,7 +71,14 @@ function hideSuggestions() {
     <div class="nav-container">
       <!-- Logo Branding -->
       <RouterLink to="/" class="brand-logo">
-        <svg class="brand-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg
+          class="brand-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
         </svg>
         <span class="brand-name gold-text">{{ t('nav.brandName') }}</span>
@@ -80,7 +87,16 @@ function hideSuggestions() {
       <!-- Global Live Search Bar with Autocomplete -->
       <div class="search-box">
         <div class="search-input-wrapper">
-          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            class="search-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
@@ -103,7 +119,17 @@ function hideSuggestions() {
             @mousedown.prevent
             @click="clearSearch"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="11"
+              height="11"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
@@ -118,7 +144,15 @@ function hideSuggestions() {
             class="suggestion-item"
             @mousedown="selectSuggestion(item)"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
               <circle cx="11" cy="11" r="8"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
@@ -127,39 +161,37 @@ function hideSuggestions() {
         </ul>
       </div>
 
-      <!-- Navigation Links & Language Toggle -->
-      <div class="nav-right-group">
-        <nav class="nav-links">
-          <RouterLink to="/" class="nav-item">{{ t('nav.search') }}</RouterLink>
-          <RouterLink to="/sets" class="nav-item">{{ t('nav.sets') }}</RouterLink>
-          <RouterLink to="/random" class="nav-item">{{ t('nav.random') }}</RouterLink>
-          <RouterLink to="/binder" class="nav-item binder-link">
-            <span>{{ t('nav.binder') }}</span>
-            <span v-if="binderStore.totalCount > 0" class="binder-badge">
-              {{ binderStore.totalCount }}
-            </span>
-          </RouterLink>
-        </nav>
+      <!-- Navigation Links -->
+      <nav class="nav-links">
+        <RouterLink to="/" class="nav-item">{{ t('nav.search') }}</RouterLink>
+        <RouterLink to="/sets" class="nav-item">{{ t('nav.sets') }}</RouterLink>
+        <RouterLink to="/random" class="nav-item">{{ t('nav.random') }}</RouterLink>
+        <RouterLink to="/binder" class="nav-item binder-link">
+          <span>{{ t('nav.binder') }}</span>
+          <span v-if="binderStore.totalCount > 0" class="binder-badge">
+            {{ binderStore.totalCount }}
+          </span>
+        </RouterLink>
+      </nav>
 
-        <!-- Language Selector Toggle Switch -->
-        <div class="lang-selector-switch">
-          <button
-            class="lang-btn"
-            :class="{ active: locale === 'en' }"
-            title="English"
-            @click="setLocale('en')"
-          >
-            🇺🇸 EN
-          </button>
-          <button
-            class="lang-btn"
-            :class="{ active: locale === 'pt-BR' }"
-            title="Português Brasileiro"
-            @click="setLocale('pt-BR')"
-          >
-            🇧🇷 PT-BR
-          </button>
-        </div>
+      <!-- Language Selector Toggle Switch -->
+      <div class="lang-selector-switch">
+        <button
+          class="lang-btn"
+          :class="{ active: locale === 'en' }"
+          title="English"
+          @click="setLocale('en')"
+        >
+          🇺🇸 EN
+        </button>
+        <button
+          class="lang-btn"
+          :class="{ active: locale === 'pt-BR' }"
+          title="Português Brasileiro"
+          @click="setLocale('pt-BR')"
+        >
+          🇧🇷 PT-BR
+        </button>
       </div>
     </div>
   </header>
@@ -183,7 +215,6 @@ function hideSuggestions() {
 .nav-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 16px;
   width: 100%;
   min-width: 0;
@@ -214,15 +245,15 @@ function hideSuggestions() {
 .search-box {
   position: relative;
   width: 320px;
-  max-width: 360px;
-  flex: 1 1 180px;
-  min-width: 150px;
+  flex: 0 0 320px;
+  box-sizing: border-box;
 }
 
 .search-input-wrapper {
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .search-icon {
@@ -234,6 +265,7 @@ function hideSuggestions() {
 
 .search-input {
   width: 100%;
+  box-sizing: border-box;
   padding: 9px 36px 9px 38px;
   background: var(--bg-surface-elevated);
   border: 1px solid var(--border-glass);
@@ -308,17 +340,11 @@ function hideSuggestions() {
   color: var(--primary-gold);
 }
 
-.nav-right-group {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
-}
-
 .nav-links {
   display: flex;
   align-items: center;
   gap: 4px;
+  flex-shrink: 0;
 }
 
 .nav-item {
@@ -356,13 +382,14 @@ function hideSuggestions() {
 
 /* Language selector toggle switch */
 .lang-selector-switch {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  flex-shrink: 0;
+  margin-left: auto;
   background: var(--bg-surface-elevated);
   border: 1px solid var(--border-glass);
   border-radius: var(--radius-full);
   padding: 2px;
-  flex-shrink: 0;
 }
 
 .lang-btn {
