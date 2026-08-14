@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useI18n } from '@/i18n/useI18n'
 import { useRandomCardQuery } from '@/queries/useScryfallQueries'
 import CardDetails from '@/components/CardDetails.vue'
@@ -13,6 +13,16 @@ const { data: card, isLoading, isFetching, refetch } = useRandomCardQuery(filter
 function drawNextCard() {
   refetch()
 }
+
+const filtersOptions = computed(() => [
+  { value: '', label: t('random.filterAny') },
+  { value: 'is:commander', label: t('random.filterCommander') },
+  { value: 'r:mythic', label: t('random.filterMythic') },
+  { value: 'c:red', label: t('random.filterRed') },
+  { value: 'c:blue', label: t('random.filterBlue') },
+  { value: 't:creature', label: t('random.filterCreature') },
+  { value: 't:planeswalker', label: t('random.filterPlaneswalker') },
+])
 </script>
 
 <template>
@@ -25,13 +35,9 @@ function drawNextCard() {
 
       <div class="draw-controls">
         <select v-model="filterQuery" class="filter-select" @change="drawNextCard">
-          <option value="">{{ t('random.filterAny') }}</option>
-          <option value="is:commander">{{ t('random.filterCommander') }}</option>
-          <option value="r:mythic">{{ t('random.filterMythic') }}</option>
-          <option value="c:red">{{ t('random.filterRed') }}</option>
-          <option value="c:blue">{{ t('random.filterBlue') }}</option>
-          <option value="t:creature">{{ t('random.filterCreature') }}</option>
-          <option value="t:planeswalker">{{ t('random.filterPlaneswalker') }}</option>
+          <option v-for="filter in filtersOptions" :key="filter.value" :value="filter.value">
+            {{ filter.label }}
+          </option>
         </select>
 
         <button class="btn-primary" :disabled="isLoading || isFetching" @click="drawNextCard">
@@ -62,7 +68,13 @@ function drawNextCard() {
             />
             <div
               class="skeleton"
-              style="width: 100%; height: 42px; border-radius: 8px; margin-top: 12px; max-width: 320px"
+              style="
+                width: 100%;
+                height: 42px;
+                border-radius: 8px;
+                margin-top: 12px;
+                max-width: 320px;
+              "
             />
           </div>
           <div class="skeleton-details-col">

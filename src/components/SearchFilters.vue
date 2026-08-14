@@ -2,7 +2,6 @@
 import { computed } from 'vue'
 import { useCardsStore } from '@/stores/cards'
 import { useI18n } from '@/i18n/useI18n'
-import type { SortOrder } from '@/types/scryfall'
 
 const cardsStore = useCardsStore()
 const { t } = useI18n()
@@ -45,7 +44,7 @@ const formats = computed(() => [
   { value: 'pauper', label: t('filters.pauper') },
 ])
 
-const sortOrders = computed<{ value: SortOrder; label: string }[]>(() => [
+const sortOrders = computed(() => [
   { value: 'edhrec', label: t('filters.sortEdhrec') },
   { value: 'name', label: t('filters.sortName') },
   { value: 'usd', label: t('filters.sortPrice') },
@@ -54,6 +53,18 @@ const sortOrders = computed<{ value: SortOrder; label: string }[]>(() => [
   { value: 'cmc', label: t('filters.sortCmc') },
   { value: 'power', label: t('filters.sortPower') },
   { value: 'toughness', label: t('filters.sortToughness') },
+])
+
+const sortDirections = computed(() => [
+  { value: 'auto', label: t('filters.dirAuto') },
+  { value: 'asc', label: t('filters.dirAsc') },
+  { value: 'desc', label: t('filters.dirDesc') },
+])
+
+const colorMatchOptions = computed(() => [
+  { value: 'at_least', label: `${t('filters.colorAtLeast')} (>=)` },
+  { value: 'exact', label: `${t('filters.colorExact')} (=)` },
+  { value: 'at_most', label: `${t('filters.colorAtMost')} (<=)` },
 ])
 
 function handleApply() {
@@ -92,9 +103,13 @@ function handleReset() {
       <!-- Color Match Mode -->
       <div v-if="cardsStore.selectedColors.length > 0" class="match-mode-selector">
         <select v-model="cardsStore.colorMatchType" @change="handleApply">
-          <option value="at_least">{{ t('filters.colorAtLeast') }} (&gt;=)</option>
-          <option value="exact">{{ t('filters.colorExact') }} (=)</option>
-          <option value="at_most">{{ t('filters.colorAtMost') }} (&lt;=)</option>
+          <option
+            v-for="colorMatch in colorMatchOptions"
+            :key="colorMatch.value"
+            :value="colorMatch.value"
+          >
+            {{ colorMatch.label }}
+          </option>
         </select>
       </div>
     </div>
@@ -134,14 +149,18 @@ function handleReset() {
       <label class="group-label">{{ t('filters.sortOrder') }}</label>
       <div class="sort-controls">
         <select v-model="cardsStore.sortOrder" class="filter-select" @change="handleApply">
-          <option v-for="s in sortOrders" :key="s.value" :value="s.value">
-            {{ s.label }}
+          <option v-for="sortOrder in sortOrders" :key="sortOrder.value" :value="sortOrder.value">
+            {{ sortOrder.label }}
           </option>
         </select>
         <select v-model="cardsStore.sortDir" class="filter-select dir-select" @change="handleApply">
-          <option value="auto">{{ t('filters.dirAuto') }}</option>
-          <option value="asc">{{ t('filters.dirAsc') }}</option>
-          <option value="desc">{{ t('filters.dirDesc') }}</option>
+          <option
+            v-for="sortDirection in sortDirections"
+            :key="sortDirection.value"
+            :value="sortDirection.value"
+          >
+            {{ sortDirection.label }}
+          </option>
         </select>
       </div>
     </div>
