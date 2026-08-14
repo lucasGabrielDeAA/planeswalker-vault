@@ -5,7 +5,7 @@ import { useI18n } from '@/i18n/useI18n'
 import CardCard from '@/components/CardCard.vue'
 
 const binderStore = useBinderStore()
-const { t, formatCurrency, usdRateVariationText, locale } = useI18n()
+const { t, formatCurrency, usdRateVariationText } = useI18n()
 
 const showExportModal = ref(false)
 const exportText = ref('')

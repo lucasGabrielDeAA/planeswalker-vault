@@ -14,7 +14,6 @@ const searchOptionsRef = computed(() => cardsStore.searchOptions)
 const {
   data: searchResult,
   isLoading,
-  isFetching,
   isError,
   error,
 } = useCardSearchQuery(searchOptionsRef)

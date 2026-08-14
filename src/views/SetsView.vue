@@ -8,7 +8,7 @@ import type { ScryfallSet } from '@/types/scryfall'
 
 const router = useRouter()
 const cardsStore = useCardsStore()
-const { t, locale, formatDate } = useI18n()
+const { t, formatDate } = useI18n()
 
 const searchFilter = ref('')
 const selectedSetType = ref('')

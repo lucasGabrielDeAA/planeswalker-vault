@@ -92,9 +92,9 @@ function handleReset() {
       <!-- Color Match Mode -->
       <div v-if="cardsStore.selectedColors.length > 0" class="match-mode-selector">
         <select v-model="cardsStore.colorMatchType" @change="handleApply">
-          <option value="at_least">{{ t('filters.colorAtLeast') }} (>=)</option>
+          <option value="at_least">{{ t('filters.colorAtLeast') }} (&gt;=)</option>
           <option value="exact">{{ t('filters.colorExact') }} (=)</option>
-          <option value="at_most">{{ t('filters.colorAtMost') }} (<=)</option>
+          <option value="at_most">{{ t('filters.colorAtMost') }} (&lt;=)</option>
         </select>
       </div>
     </div>

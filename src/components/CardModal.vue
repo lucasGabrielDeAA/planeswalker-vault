@@ -4,11 +4,12 @@ import { useCardsStore } from '@/stores/cards'
 import { useBinderStore } from '@/stores/binder'
 import { useI18n } from '@/i18n/useI18n'
 import { useCardRulingsQuery, useCardPrintsQuery } from '@/queries/useScryfallQueries'
+import type { ScryfallLegalities } from '@/types/scryfall'
 import ManaSymbol from './ManaSymbol.vue'
 
 const cardsStore = useCardsStore()
 const binderStore = useBinderStore()
-const { t, formatCurrency, formatDate, usdRateVariationText, locale } = useI18n()
+const { t, formatCurrency, formatDate, usdRateVariationText } = useI18n()
 
 const activeTab = ref<'details' | 'rulings' | 'prints'>('details')
 const activeFaceIndex = ref(0)
@@ -19,7 +20,9 @@ const binderQuantity = computed(() => (card.value ? binderStore.getItemQuantity(
 
 // Reactive IDs for TanStack Query
 const cardIdRef = computed(() => (cardsStore.isModalOpen && card.value ? card.value.id : undefined))
-const oracleIdRef = computed(() => (cardsStore.isModalOpen && card.value ? card.value.oracle_id : undefined))
+const oracleIdRef = computed(() =>
+  cardsStore.isModalOpen && card.value ? card.value.oracle_id : undefined,
+)
 
 // TanStack Query hooks for card rulings and prints
 const { data: rulingsData, isLoading: isLoadingRulings } = useCardRulingsQuery(cardIdRef)
@@ -58,14 +61,20 @@ const displayImage = computed(() => {
 const displayTitle = computed(() => currentFace.value?.name || card.value?.name || '')
 const displayManaCost = computed(() => currentFace.value?.mana_cost || card.value?.mana_cost || '')
 const displayTypeLine = computed(() => currentFace.value?.type_line || card.value?.type_line || '')
-const displayOracleText = computed(() => currentFace.value?.oracle_text || card.value?.oracle_text || '')
-const displayFlavorText = computed(() => currentFace.value?.flavor_text || card.value?.flavor_text || '')
+const displayOracleText = computed(
+  () => currentFace.value?.oracle_text || card.value?.oracle_text || '',
+)
+const displayFlavorText = computed(
+  () => currentFace.value?.flavor_text || card.value?.flavor_text || '',
+)
 const displayPowerToughness = computed(() => {
   const p = currentFace.value?.power || card.value?.power
   const t = currentFace.value?.toughness || card.value?.toughness
   if (p !== undefined && t !== undefined) return `${p} / ${t}`
-  if (currentFace.value?.loyalty || card.value?.loyalty) return `Loyalty: ${currentFace.value?.loyalty || card.value?.loyalty}`
-  if (currentFace.value?.defense || card.value?.defense) return `Defense: ${currentFace.value?.defense || card.value?.defense}`
+  if (currentFace.value?.loyalty || card.value?.loyalty)
+    return `Loyalty: ${currentFace.value?.loyalty || card.value?.loyalty}`
+  if (currentFace.value?.defense || card.value?.defense)
+    return `Defense: ${currentFace.value?.defense || card.value?.defense}`
   return null
 })
 
@@ -75,7 +84,7 @@ watch(
   () => {
     activeFaceIndex.value = 0
     activeTab.value = 'details'
-  }
+  },
 )
 
 function handleClose() {
@@ -92,7 +101,7 @@ function toggleBinder() {
 const legalitiesList = computed(() => {
   if (!card.value?.legalities) return []
   const map = card.value.legalities
-  const formats = [
+  const formats: Array<{ key: keyof ScryfallLegalities; name: string }> = [
     { key: 'standard', name: 'Standard' },
     { key: 'pioneer', name: 'Pioneer' },
     { key: 'modern', name: 'Modern' },
@@ -106,7 +115,7 @@ const legalitiesList = computed(() => {
   ]
 
   return formats.map((f) => {
-    const status = (map as any)[f.key] || 'not_legal'
+    const status = map[f.key] || 'not_legal'
     return {
       name: f.name,
       status: status.replace('_', ' '),
@@ -122,7 +131,15 @@ const legalitiesList = computed(() => {
       <div class="modal-content glass-panel fade-in">
         <!-- Close Button -->
         <button class="close-btn" @click="handleClose" title="Close modal">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
@@ -150,10 +167,22 @@ const legalitiesList = computed(() => {
 
             <!-- Action buttons: Save to Binder -->
             <button class="btn-primary binder-toggle-btn" @click="toggleBinder">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" :fill="isSaved ? '#0b0d14' : 'none'" stroke="currentColor" stroke-width="2">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                :fill="isSaved ? '#0b0d14' : 'none'"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                />
               </svg>
-              <span>{{ isSaved ? t('card.inBinder', { qty: binderQuantity }) : t('card.addToBinder') }}</span>
+              <span>{{
+                isSaved ? t('card.inBinder', { qty: binderQuantity }) : t('card.addToBinder')
+              }}</span>
             </button>
           </div>
 
@@ -166,7 +195,11 @@ const legalitiesList = computed(() => {
               </div>
               <p class="type-line">{{ displayTypeLine }}</p>
               <div class="set-rarity-row">
-                <span class="set-name-badge">{{ card.set_name }} ({{ card.set.toUpperCase() }}) #{{ card.collector_number }}</span>
+                <span class="set-name-badge"
+                  >{{ card.set_name }} ({{ card.set.toUpperCase() }}) #{{
+                    card.collector_number
+                  }}</span
+                >
                 <span class="rarity-badge" :class="`rarity-${card.rarity}`">{{ card.rarity }}</span>
               </div>
             </div>
@@ -201,7 +234,9 @@ const legalitiesList = computed(() => {
               <!-- Oracle Text -->
               <div v-if="displayOracleText" class="oracle-box">
                 <p class="oracle-text">{{ displayOracleText }}</p>
-                <p v-if="displayFlavorText" class="flavor-text"><em>{{ displayFlavorText }}</em></p>
+                <p v-if="displayFlavorText" class="flavor-text">
+                  <em>{{ displayFlavorText }}</em>
+                </p>
               </div>
 
               <!-- Power / Toughness / Loyalty -->
@@ -210,7 +245,9 @@ const legalitiesList = computed(() => {
               </div>
 
               <!-- Artist Info -->
-              <p class="artist-info">Illustrated by <strong>{{ currentFace?.artist || card.artist }}</strong></p>
+              <p class="artist-info">
+                Illustrated by <strong>{{ currentFace?.artist || card.artist }}</strong>
+              </p>
 
               <!-- Prices & Purchase Links -->
               <div class="prices-section">
@@ -225,21 +262,41 @@ const legalitiesList = computed(() => {
                   </div>
                   <div class="price-card">
                     <span class="price-label">{{ t('card.usdFoil') }}</span>
-                    <span class="price-value foil">{{ formatCurrency(card.prices?.usd_foil) }}</span>
+                    <span class="price-value foil">{{
+                      formatCurrency(card.prices?.usd_foil)
+                    }}</span>
                   </div>
                   <div class="price-card">
                     <span class="price-label">{{ t('card.eur') }}</span>
-                    <span class="price-value">{{ card.prices?.eur ? `€${card.prices.eur}` : '—' }}</span>
+                    <span class="price-value">{{
+                      card.prices?.eur ? `€${card.prices.eur}` : '—'
+                    }}</span>
                   </div>
                   <div class="price-card">
                     <span class="price-label">{{ t('card.tix') }}</span>
-                    <span class="price-value">{{ card.prices?.tix ? `${card.prices.tix}` : '—' }}</span>
+                    <span class="price-value">{{
+                      card.prices?.tix ? `${card.prices.tix}` : '—'
+                    }}</span>
                   </div>
                 </div>
 
                 <div v-if="card.purchase_uris" class="purchase-links">
-                  <a v-if="card.purchase_uris.tcgplayer" :href="card.purchase_uris.tcgplayer" target="_blank" rel="noopener" class="buy-link">Buy on TCGplayer</a>
-                  <a v-if="card.purchase_uris.cardmarket" :href="card.purchase_uris.cardmarket" target="_blank" rel="noopener" class="buy-link">Buy on Cardmarket</a>
+                  <a
+                    v-if="card.purchase_uris.tcgplayer"
+                    :href="card.purchase_uris.tcgplayer"
+                    target="_blank"
+                    rel="noopener"
+                    class="buy-link"
+                    >Buy on TCGplayer</a
+                  >
+                  <a
+                    v-if="card.purchase_uris.cardmarket"
+                    :href="card.purchase_uris.cardmarket"
+                    target="_blank"
+                    rel="noopener"
+                    class="buy-link"
+                    >Buy on Cardmarket</a
+                  >
                 </div>
               </div>
 
@@ -249,7 +306,9 @@ const legalitiesList = computed(() => {
                 <div class="legalities-grid">
                   <div v-for="leg in legalitiesList" :key="leg.name" class="leg-item">
                     <span class="leg-name">{{ leg.name }}</span>
-                    <span class="pill-badge" :class="`pill-${leg.rawStatus}`">{{ leg.status }}</span>
+                    <span class="pill-badge" :class="`pill-${leg.rawStatus}`">{{
+                      leg.status
+                    }}</span>
                   </div>
                 </div>
               </div>
@@ -258,8 +317,8 @@ const legalitiesList = computed(() => {
             <!-- Tab 2: Official Rulings -->
             <div v-else-if="activeTab === 'rulings'" class="tab-content">
               <div v-if="isLoadingRulings" class="rulings-loading">
-                <div class="skeleton" style="height: 40px; margin-bottom: 8px;" />
-                <div class="skeleton" style="height: 40px;" />
+                <div class="skeleton" style="height: 40px; margin-bottom: 8px" />
+                <div class="skeleton" style="height: 40px" />
               </div>
               <div v-else-if="rulings.length === 0" class="empty-tab">
                 No rulings found for this card.
@@ -275,7 +334,7 @@ const legalitiesList = computed(() => {
             <!-- Tab 3: Printings / Variations -->
             <div v-else-if="activeTab === 'prints'" class="tab-content">
               <div v-if="isLoadingPrints" class="prints-loading">
-                <div class="skeleton" style="height: 50px;" />
+                <div class="skeleton" style="height: 50px" />
               </div>
               <div v-else class="prints-grid">
                 <div
@@ -286,7 +345,9 @@ const legalitiesList = computed(() => {
                   @click="cardsStore.openCardModal(p)"
                 >
                   <span class="print-set">{{ p.set_name }} ({{ p.set.toUpperCase() }})</span>
-                  <span class="print-rarity" :class="`rarity-${p.rarity}`">#{{ p.collector_number }} • {{ p.rarity }}</span>
+                  <span class="print-rarity" :class="`rarity-${p.rarity}`"
+                    >#{{ p.collector_number }} • {{ p.rarity }}</span
+                  >
                 </div>
               </div>
             </div>
@@ -322,7 +383,9 @@ const legalitiesList = computed(() => {
   padding: 24px;
   background: var(--bg-surface);
   border: 1px solid var(--border-glass);
-  box-shadow: var(--shadow-md), 0 0 40px rgba(0, 0, 0, 0.9);
+  box-shadow:
+    var(--shadow-md),
+    0 0 40px rgba(0, 0, 0, 0.9);
 }
 
 .close-btn {

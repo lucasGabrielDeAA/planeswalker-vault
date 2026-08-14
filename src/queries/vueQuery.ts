@@ -2,7 +2,7 @@ import { ref, watch, inject, type App, type Ref } from 'vue'
 
 export type QueryKey = readonly unknown[]
 
-export interface QueryOptions<TData = any, _TError = Error> {
+export interface QueryOptions<TData = unknown, _TError = Error> {
   queryKey: QueryKey | Ref<QueryKey> | (() => QueryKey)
   queryFn: (context: { queryKey: QueryKey }) => Promise<TData>
   enabled?: boolean | Ref<boolean> | (() => boolean)
@@ -12,7 +12,7 @@ export interface QueryOptions<TData = any, _TError = Error> {
   retry?: boolean | number
 }
 
-export interface QueryResult<TData = any, TError = Error> {
+export interface QueryResult<TData = unknown, TError = Error> {
   data: Ref<TData | undefined>
   isLoading: Ref<boolean>
   isFetching: Ref<boolean>
@@ -21,7 +21,7 @@ export interface QueryResult<TData = any, TError = Error> {
   refetch: () => Promise<TData | undefined>
 }
 
-interface CacheEntry<TData = any> {
+interface CacheEntry<TData = unknown> {
   data: TData
   updatedAt: number
   promise?: Promise<TData>
@@ -41,7 +41,7 @@ export interface QueryClientConfig {
 }
 
 export class QueryClient {
-  private cache = new Map<string, CacheEntry>()
+  private cache = new Map<string, CacheEntry<unknown>>()
   private defaultStaleTime: number
 
   constructor(options?: QueryClientConfig) {
@@ -52,12 +52,13 @@ export class QueryClient {
     return JSON.stringify(key)
   }
 
-  getQueryData<TData = any>(queryKey: QueryKey): TData | undefined {
+  getQueryData<TData = unknown>(queryKey: QueryKey): TData | undefined {
     const keyStr = this.serializeKey(queryKey)
-    return this.cache.get(keyStr)?.data
+    const entry = this.cache.get(keyStr)
+    return entry ? (entry.data as TData) : undefined
   }
 
-  setQueryData<TData = any>(queryKey: QueryKey, data: TData): void {
+  setQueryData<TData = unknown>(queryKey: QueryKey, data: TData): void {
     const keyStr = this.serializeKey(queryKey)
     this.cache.set(keyStr, {
       data,
@@ -65,9 +66,13 @@ export class QueryClient {
     })
   }
 
-  async fetchQuery<TData = any>(queryKey: QueryKey, queryFn: (ctx: { queryKey: QueryKey }) => Promise<TData>, staleTime?: number): Promise<TData> {
+  async fetchQuery<TData = unknown>(
+    queryKey: QueryKey,
+    queryFn: (ctx: { queryKey: QueryKey }) => Promise<TData>,
+    staleTime?: number
+  ): Promise<TData> {
     const keyStr = this.serializeKey(queryKey)
-    const entry = this.cache.get(keyStr)
+    const entry = this.cache.get(keyStr) as CacheEntry<TData> | undefined
     const effectiveStaleTime = staleTime ?? this.defaultStaleTime
 
     if (entry && Date.now() - entry.updatedAt < effectiveStaleTime) {
@@ -114,10 +119,15 @@ export const VueQueryPlugin = {
   },
 }
 
-export function useQuery<TData = any, TError = Error>(
+export function useQuery<TData = unknown, TError = Error>(
   options: QueryOptions<TData, TError>
 ): QueryResult<TData, TError> {
-  const queryClient = inject<QueryClient>(QUERY_CLIENT_KEY, globalQueryClient)
+  let queryClient: QueryClient
+  try {
+    queryClient = inject<QueryClient>(QUERY_CLIENT_KEY, globalQueryClient) ?? globalQueryClient
+  } catch {
+    queryClient = globalQueryClient
+  }
 
   const data = ref<TData | undefined>(undefined) as Ref<TData | undefined>
   const isLoading = ref<boolean>(true)
@@ -179,9 +189,9 @@ export function useQuery<TData = any, TError = Error>(
       isError.value = false
       error.value = null
       return result
-    } catch (err: any) {
+    } catch (err: unknown) {
       isError.value = true
-      error.value = err
+      error.value = (err instanceof Error ? err : new Error(String(err))) as unknown as TError
     } finally {
       isLoading.value = false
       isFetching.value = false

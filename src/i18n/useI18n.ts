@@ -42,17 +42,17 @@ export function useI18n() {
   // Translation helper function t('section.key', { param: 'val' })
   function t(path: string, params?: Record<string, string | number>): string {
     const keys = path.split('.')
-    let current: any = dictionaries[currentLocale.value]
+    let current: unknown = dictionaries[currentLocale.value]
 
     for (const key of keys) {
       if (current && typeof current === 'object' && key in current) {
-        current = current[key]
+        current = (current as Record<string, unknown>)[key]
       } else {
         // Fallback to English if key missing
-        let fallback: any = dictionaries['en']
+        let fallback: unknown = dictionaries['en']
         for (const k of keys) {
           if (fallback && typeof fallback === 'object' && k in fallback) {
-            fallback = fallback[k]
+            fallback = (fallback as Record<string, unknown>)[k]
           } else {
             return path
           }
