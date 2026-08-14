@@ -26,7 +26,7 @@ async function rateLimitedFetch(url: string, init?: RequestInit): Promise<Respon
     ...init,
     headers: {
       Accept: 'application/json;q=0.9,*/*;q=0.8',
-      ...(init?.headers || {}),
+      ...init?.headers,
     },
   })
 

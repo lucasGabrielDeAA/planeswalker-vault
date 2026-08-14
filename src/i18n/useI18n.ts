@@ -5,13 +5,13 @@ import { useExchangeRateQuery } from '@/queries/useExchangeRateQuery'
 
 export type SupportedLocale = 'en' | 'pt-BR'
 
-const STORAGE_KEY = 'magic_cards_locale'
+const STORAGE_KEY = 'planeswalker_vault_locale'
 
 // Get initial locale from localStorage or browser settings
 function getInitialLocale(): SupportedLocale {
   const saved = localStorage.getItem(STORAGE_KEY)
   if (saved === 'en' || saved === 'pt-BR') return saved
-  
+
   if (typeof navigator !== 'undefined' && navigator.language?.toLowerCase().startsWith('pt')) {
     return 'pt-BR'
   }
@@ -28,7 +28,7 @@ const dictionaries = {
 export function useI18n() {
   const { data: exchangeRateData, refetch: fetchExchangeRate } = useExchangeRateQuery()
 
-  const usdToBrlRate = computed(() => exchangeRateData.value?.bid ?? 5.50)
+  const usdToBrlRate = computed(() => exchangeRateData.value?.bid ?? 5.5)
   const usdPctChange = computed(() => exchangeRateData.value?.pctChange ?? null)
   function setLocale(locale: SupportedLocale) {
     currentLocale.value = locale
@@ -79,8 +79,10 @@ export function useI18n() {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     })
-    const variation = usdPctChange.value ? ` (${usdPctChange.value > '0' ? '+' : ''}${usdPctChange.value}%)` : ''
-    
+    const variation = usdPctChange.value
+      ? ` (${usdPctChange.value > '0' ? '+' : ''}${usdPctChange.value}%)`
+      : ''
+
     if (currentLocale.value === 'pt-BR') {
       return `Cotação USD: 1 USD = R$ ${formattedRate}${variation}`
     }

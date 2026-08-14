@@ -686,6 +686,7 @@ function goToPage(page: number) {
 }
 .jump-input {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .jump-btn {
