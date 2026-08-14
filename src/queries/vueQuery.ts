@@ -162,9 +162,9 @@ export function useQuery<TData = any, TError = Error>(
       isError.value = false
       error.value = null
     } else {
-      if (data.value === undefined) {
-        isLoading.value = true
-      }
+      data.value = undefined
+      isLoading.value = true
+      error.value = null
     }
 
     isFetching.value = true

@@ -20,6 +20,10 @@ export const ptBR: Translations = {
     page: 'Página {current} de {total}',
     prev: 'Anterior',
     next: 'Próxima',
+    first: 'Primeira',
+    last: 'Última',
+    jumpTo: 'Ir para',
+    pageOf: 'de {total}',
   },
   filters: {
     title: 'Filtros & Ordenação',

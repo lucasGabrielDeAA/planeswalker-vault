@@ -18,6 +18,10 @@ export const en = {
     page: 'Page {current} of {total}',
     prev: 'Previous',
     next: 'Next',
+    first: 'First',
+    last: 'Last',
+    jumpTo: 'Go to',
+    pageOf: 'of {total}',
   },
   filters: {
     title: 'Filters & Sorting',
